@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 
+
 function startCopy() {
   fs.rm(path.join(__dirname, 'files-copy'), {
     recursive: true

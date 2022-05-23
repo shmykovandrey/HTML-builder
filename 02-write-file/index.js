@@ -25,5 +25,6 @@ stdin.on('data', data => {
   }
   writeFile(data);
 });
+
 process.on('exit', () => console.log('До новых встреч!'));
 process.on('SIGINT', () => process.exit(1));

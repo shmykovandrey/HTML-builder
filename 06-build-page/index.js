@@ -181,7 +181,23 @@ function addHeader(data) {
     newData += chunk;
   });
   stream.on('end', () => {
-    writeToHtmlFile(data.replace('{{header}}', newData));
+    addAbout(data.replace('{{header}}', newData));
+  });
+}
+
+function addAbout(data) {
+  let newData = '';
+  const stream = fs.createReadStream(path.join(__dirname, 'components', 'about.html'));
+  stream.on('error', () => {
+    fs.writeFile(path.join(__dirname, 'project-dist', 'index.html'), data, err => {
+      if (err) console.log(err.message);
+    });
+  });
+  stream.on('data', chunk => {
+    newData += chunk;
+  });
+  stream.on('end', () => {
+    writeToHtmlFile(data.replace('{{about}}', newData));
   });
 }
 

@@ -7,37 +7,45 @@ function startCopy() {
   }, () => {
     createDir();
   });
-
 }
 
 function createDir() {
   fs.mkdir(path.join(__dirname, 'project-dist'), {
     recursive: true
-  }, () => {});
-  fs.mkdir(path.join(__dirname, 'project-dist', 'assets'), {
-    recursive: true
-  }, () => {});
-  fs.mkdir(path.join(__dirname, 'project-dist', 'assets', 'fonts'), () => {
-    getFilesNamesFonts();
+  }, () => {
+    fs.mkdir(path.join(__dirname, 'project-dist', 'assets'), {
+      recursive: true
+    }, () => {
+      fs.mkdir(path.join(__dirname, 'project-dist', 'assets', 'fonts'), () => {
+        getFilesNamesFonts();
+      });
+      fs.mkdir(path.join(__dirname, 'project-dist', 'assets', 'img'), () => {
+        getFilesNamesImg();
+      });
+      fs.mkdir(path.join(__dirname, 'project-dist', 'assets', 'svg'), () => {
+        getFilesNamesSvg();
+      });
+    });
   });
-  fs.mkdir(path.join(__dirname, 'project-dist', 'assets', 'img'), () => {
-    getFilesNamesImg();
-  });
-  fs.mkdir(path.join(__dirname, 'project-dist', 'assets', 'svg'), () => {
-    getFilesNamesSvg();
-  });
+
 }
 
 function copyFileFonts(fname) {
-  const readStream = fs.createReadStream(path.join(__dirname, 'assets', 'fonts', fname));
-  const writeStream = fs.createWriteStream(path.join(__dirname, 'project-dist', 'assets', 'fonts', fname));
-  readStream.pipe(writeStream);
+  fs.writeFile(path.join(__dirname, 'assets', 'fonts', fname), '', err => {
+    if (err) console.log(err.message);
+    const readStream = fs.createReadStream(path.join(__dirname, 'assets', 'fonts', fname));
+    const writeStream = fs.createWriteStream(path.join(__dirname, 'project-dist', 'assets', 'fonts', fname));
+    readStream.pipe(writeStream);
+  });
 }
 
 function copyFileImg(fname) {
-  const readStream = fs.createReadStream(path.join(__dirname, 'assets', 'img', fname));
-  const writeStream = fs.createWriteStream(path.join(__dirname, 'project-dist', 'assets', 'img', fname));
-  readStream.pipe(writeStream);
+  fs.writeFile(path.join(path.join(__dirname, 'project-dist', 'assets', 'img', fname)), '', err => {
+    if (err) console.log(err.message);
+    const readStream = fs.createReadStream(path.join(__dirname, 'assets', 'img', fname));
+    const writeStream = fs.createWriteStream(path.join(__dirname, 'project-dist', 'assets', 'img', fname));
+    readStream.pipe(writeStream);
+  });
 }
 
 function copyFileSvg(fname) {
@@ -88,10 +96,6 @@ function getFilesNamesSvg() {
   });
 }
 
-
-startCopy();
-
-
 function removeBundle() {
   fs.rm(path.join(__dirname, 'project-dist', 'style.css'), {
     recursive: true
@@ -136,10 +140,6 @@ function getFilesNames() {
     });
   });
 }
-
-mergeStyles();
-
-readHtml();
 
 function readHtml() {
   let data = '';
@@ -206,3 +206,11 @@ function writeToHtmlFile(data) {
     if (err) console.log(err.message);
   });
 }
+
+function startProject() {
+  startCopy();
+  mergeStyles();
+  readHtml();
+}
+
+startProject()
